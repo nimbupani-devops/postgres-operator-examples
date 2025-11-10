@@ -1,29 +1,53 @@
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
-  name: hippo
+  name: nimbupani
 spec:
   postgresVersion: 17
   users:
-    - name: rhino
+    - name: postgres
       databases:
-        - zoo
+        - auth
+        - user
+        - job
+        - social
+        - analytics
   instances:
-    - name: instance1
+    - name: shard-0
       dataVolumeClaimSpec:
+        storageClassName: hcloud-volume
         accessModes:
-        - "ReadWriteOnce"
+          - "ReadWriteOnce"
         resources:
           requests:
-            storage: 1Gi
+            storage: 10Gi
+
+    - name: shard-1
+      dataVolumeClaimSpec:
+        storageClassName: hcloud-volume
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 10Gi
+
+    - name: shard-2
+      dataVolumeClaimSpec:
+        storageClassName: hcloud-volume
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 10Gi
+
   backups:
     pgbackrest:
       repos:
-      - name: repo1
-        volume:
-          volumeClaimSpec:
-            accessModes:
-            - "ReadWriteOnce"
-            resources:
-              requests:
-                storage: 1Gi
+        - name: repo1
+          volume:
+            volumeClaimSpec:
+              accessModes:
+                - "ReadWriteOnce"
+              resources:
+                requests:
+                  storage: 5Gi
